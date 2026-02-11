@@ -39,7 +39,6 @@
             pointer-events: none;
         }
 
-        /* Efeito de Flicker (piscada leve no monitor) */
         @keyframes flicker {
             0% { opacity: 0.98; }
             5% { opacity: 0.95; }
@@ -85,7 +84,6 @@
             text-shadow: var(--text-glow);
         }
 
-        /* Scrollbar Retro */
         #terminal::-webkit-scrollbar { width: 4px; }
         #terminal::-webkit-scrollbar-thumb { background: var(--main-green); border-radius: 2px; }
     </style>
@@ -93,8 +91,8 @@
 <body onload="document.getElementById('user-input').focus()" onclick="document.getElementById('user-input').focus()">
 
     <div id="terminal">
-        <div class="line">SYSTEM INITIALIZED... CORE v2.0</div>
-        <div class="line">AUTH: RAFAEL ROSSI MARTINS</div>
+        <div class="line">SYSTEM INITIALIZED... CORE v2.1</div>
+        <div class="line">AUTH: ANON</div>
         <div class="line">--------------------------------------------------</div>
         <div class="line">Digite <span style="color: #ffff00;">'ajuda'</span> para explorar o sistema.</div>
         <br>
@@ -110,7 +108,7 @@
         const userInput = document.getElementById('user-input');
 
         const comandos = {
-            "ajuda": "COMANDOS:<br>• <b>quemsou</b> : Perfil do usuário<br>• <b>cursos</b> : Base de conhecimento<br>• <b>cyber</b> : Protocolos de segurança<br>• <b>limpar</b> : Resetar tela<br>• <b>contato</b> : Link externo",
+            "ajuda": "COMANDOS:<br>• <b>quemsou</b> : Perfil do usuário<br>• <b>cursos</b> : Base de conhecimento<br>• <b>cyber</b> : Protocolos de segurança<br>• <b>limpar</b> : Resetar tela<br>• <b>contato</b> : Canais de comunicação",
             
             "quemsou": "USUÁRIO: <b>Rafael Rossi Martins</b><br>STATUS: Graduando em T.I.<br>RESUMO: Focado em Segurança Cibernética, Linux e Infraestrutura.",
             
@@ -123,7 +121,8 @@
             
             "cyber": "<b>DOMÍNIO TÉCNICO:</b><br> > Pentesting & Vulnerability Analysis<br> > Firewall Policy Management<br> > Linux Systems Hardening",
             
-            "contato": "GITHUB: <a href='https://github.com/sixtyrr' target='_blank' style='color: white;'>github.com/sixtyrr</a>",
+            "contato": "GITHUB: <a href='https://github.com/sixtyrr' target='_blank' style='color: white;'>github.com/sixtyrr</a><br>" +
+                       "DISCORD: <span style='color: #7289da;'>rossi6rr</span>",
             
             "limpar": ""
         };
@@ -158,4 +157,4 @@
         });
     </script>
 </body>
-</html>                
+</html>
