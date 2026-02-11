@@ -3,118 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sixtyrr | Terminal OS</title>
+    <title>Sixtyrr | Interactive Terminal</title>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0a0a0c;
+            --bg-color: #0d0d0f;
             --main-green: #00ff41;
-            --dim-green: rgba(0, 255, 65, 0.7);
-            --border-color: #1a1a1a;
+            --prompt-blue: #00d4ff;
+            --error-red: #ff3e3e;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--main-green);
             font-family: 'Fira Code', monospace;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
             overflow: hidden;
+            text-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
+        }
+
+        /* Scanlines - Efeito visual de monitor */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 3px, 3px 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        #terminal {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            padding-right: 10px;
+        }
+
+        .line { margin-bottom: 8px; line-height: 1.4; opacity: 0; transform: translateY(5px); animation: fadeIn 0.3s forwards; }
+        @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+
+        .prompt-text { color: var(--prompt-blue); }
+        .error { color: var(--error-red); }
+
+        /* Input de digitação */
+        #input-container { display: flex; align-items: center; }
+        #user-input {
+            background: transparent;
+            border: none;
+            color: var(--main-green);
+            font-family: 'Fira Code', monospace;
+            font-size: 1rem;
+            flex-grow: 1;
+            outline: none;
+            caret-color: var(--main-green);
             text-shadow: 0 0 5px var(--main-green);
         }
 
-        /* Efeito de linhas de monitor antigo (CRT) */
-        body::before {
-            content: " ";
-            display: block;
-            position: absolute;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            z-index: 2;
-            background-size: 100% 2px, 3px 100%;
-            pointer-events: none;
-        }
-
-        .terminal {
-            width: 90%;
-            max-width: 900px;
-            height: 500px;
-            background: rgba(0, 0, 0, 0.9);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 30px;
-            position: relative;
-            box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
-            overflow-y: auto;
-        }
-
-        .command-line {
-            opacity: 0;
-            transform: translateY(10px);
-            animation: fadeInLine 0.5s ease forwards;
-            margin-bottom: 12px;
-            line-height: 1.6;
-        }
-
-        .prompt { color: #ff00ff; margin-right: 10px; }
-        .system { color: #00d4ff; }
-
-        /* Animação de cada linha aparecendo */
-        .line-1 { animation-delay: 0.5s; }
-        .line-2 { animation-delay: 1.5s; }
-        .line-3 { animation-delay: 3s; }
-        .line-4 { animation-delay: 4.5s; }
-        .line-5 { animation-delay: 6s; }
-
-        @keyframes fadeInLine {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Cursor Pulsante */
-        .cursor {
-            display: inline-block;
-            width: 10px;
-            height: 20px;
-            background: var(--main-green);
-            margin-left: 5px;
-            vertical-align: middle;
-            animation: pulse 1s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; box-shadow: 0 0 10px var(--main-green); }
-            50% { opacity: 0; }
-        }
-
-        /* Estilização da barra de rolagem */
-        .terminal::-webkit-scrollbar { width: 6px; }
-        .terminal::-webkit-scrollbar-thumb { background: #1a1a1a; border-radius: 10px; }
+        /* Estilo da barra de rolagem */
+        #terminal::-webkit-scrollbar { width: 5px; }
+        #terminal::-webkit-scrollbar-thumb { background: #222; border-radius: 5px; }
     </style>
 </head>
-<body>
+<body onclick="document.getElementById('user-input').focus()">
 
-    <div class="terminal">
-        <div class="command-line line-1">
-            <span class="prompt">sixtyrr@cyber-vault:~$</span> login --guest
-        </div>
-        <div class="command-line line-2">
-            <span class="system">[SISTEMA]</span> Autenticação bem-sucedida...
-        </div>
-        <div class="command-line line-3">
-            <span class="prompt">sixtyrr@cyber-vault:~$</span> whoami
-        </div>
-        <div class="command-line line-4">
-            > Graduando em Tecnologia da Informação.<br>
-            > Especialista em Defesa Cibernética & Segurança de Redes.
-        </div>
-        <div class="command-line line-5">
-            <span class="prompt">sixtyrr@cyber-vault:~$</span> <span class="cursor"></span>
-        </div>
+    <div id="terminal">
+        <div class="line">Sixtyrr OS [Versão 1.0.2026]</div>
+        <div class="line">Iniciando protocolos de defesa... Autenticado.</div>
+        <div class="line">Digite <span style="color: yellow;">'ajuda'</span> para ver os comandos disponíveis.</div>
+        <br>
     </div>
 
+    <div id="input-container">
+        <span class="prompt-text">sixtyrr@cyber:~$ &nbsp;</span>
+        <input type="text" id="user-input" autofocus autocomplete="off" spellcheck="false">
+    </div>
+
+    <script>
+        const terminal = document.getElementById('terminal');
+        const userInput = document.getElementById('user-input');
+
+        const comandos = {
+            "ajuda": "Comandos disponíveis: <br> - <b>quemsou</b>: Minha bio <br> - <b>cyber</b>: Minha experiência <br> - <b>limpar</b>: Limpa o terminal <br> - <b>contato</b>: Meus links",
+            "quemsou": "Olá! Sou estudante de T.I. e apaixonado por tecnologia. Atualmente focado em desenvolvimento e infraestrutura.",
+            "cyber": "Experiência em: <br> > Pentesting e análise de vulnerabilidades. <br> > Defesa de perímetros e firewalls. <br> > Segurança ofensiva e defensiva.",
+            "contato": "Acesse meu GitHub: <a href='https://github.com/sixtyrr' target='_blank' style='color: white;'>github.com/sixtyrr</a>",
+            "limpar": ""
+        };
+
+        userInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const command = userInput.value.toLowerCase().trim();
+                
+                // Exibe o comando digitado no terminal
+                printLine(`<span class="prompt-text">sixtyrr@cyber:~$</span> ${command}`);
+
+                if (command === 'limpar') {
+                    terminal.innerHTML = '';
+                } else if (comandos[command]) {
+                    printLine(comandos[command]);
+                } else if (command !== "") {
+                    printLine(`<span class="error">Comando não reconhecido: '${command}'. Digite 'ajuda'.</span>`);
+                }
+
+                userInput.value = '';
+                terminal.scrollTop = terminal.scrollHeight;
+            }
+        });
+
+        function printLine(text) {
+            const div = document.createElement('div');
+            div.className = 'line';
+            div.innerHTML = text;
+            terminal.appendChild(div);
+        }
+    </script>
 </body>
 </html>
