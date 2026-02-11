@@ -26,7 +26,7 @@
             text-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
         }
 
-        /* Scanlines - Efeito visual de monitor */
+        /* Efeito de Scanlines */
         body::before {
             content: "";
             position: absolute;
@@ -51,7 +51,6 @@
         .prompt-text { color: var(--prompt-blue); }
         .error { color: var(--error-red); }
 
-        /* Input de digitação */
         #input-container { display: flex; align-items: center; }
         #user-input {
             background: transparent;
@@ -65,17 +64,16 @@
             text-shadow: 0 0 5px var(--main-green);
         }
 
-        /* Estilo da barra de rolagem */
         #terminal::-webkit-scrollbar { width: 5px; }
         #terminal::-webkit-scrollbar-thumb { background: #222; border-radius: 5px; }
     </style>
 </head>
-<body onclick="document.getElementById('user-input').focus()">
+<body onload="document.getElementById('user-input').focus()" onclick="document.getElementById('user-input').focus()">
 
     <div id="terminal">
         <div class="line">Sixtyrr OS [Versão 1.0.2026]</div>
-        <div class="line">Iniciando protocolos de defesa... Autenticado.</div>
-        <div class="line">Digite <span style="color: yellow;">'ajuda'</span> para ver os comandos disponíveis.</div>
+        <div class="line">Rafael Rossi Martins - Autenticado no sistema.</div>
+        <div class="line">Digite <span style="color: #ffff00;">'ajuda'</span> para ver os comandos.</div>
         <br>
     </div>
 
@@ -89,18 +87,27 @@
         const userInput = document.getElementById('user-input');
 
         const comandos = {
-            "ajuda": "Comandos disponíveis: <br> - <b>quemsou</b>: Minha bio <br> - <b>cyber</b>: Minha experiência <br> - <b>limpar</b>: Limpa o terminal <br> - <b>contato</b>: Meus links",
-            "quemsou": "Olá! Sou estudante de T.I. e apaixonado por tecnologia. Atualmente focado em desenvolvimento e infraestrutura.",
-            "cyber": "Experiência em: <br> > Pentesting e análise de vulnerabilidades. <br> > Defesa de perímetros e firewalls. <br> > Segurança ofensiva e defensiva.",
-            "contato": "Acesse meu GitHub: <a href='https://github.com/sixtyrr' target='_blank' style='color: white;'>github.com/sixtyrr</a>",
+            "ajuda": "Comandos disponíveis: <br> - <b>quemsou</b>: Minha bio <br> - <b>cursos</b>: Formação e Certificações <br> - <b>cyber</b>: Experiência em Cyber <br> - <b>limpar</b>: Limpa o terminal <br> - <b>contato</b>: Meus links",
+            
+            "quemsou": "Nome: <b>Rafael Rossi Martins</b><br>Status: Graduando em Tecnologia da Informação.<br>Bio: Focado em Segurança Cibernética, Linux e infraestrutura de TI.",
+            
+            "cursos": "<b>CERTIFICAÇÕES E FORMAÇÃO:</b><br>" +
+                       "--------------------------------------------------<br>" +
+                       "• Softwares de Segurança da Informação - <b>IFRS</b><br>" +
+                       "• Sistemas Operacionais - <b>IFRS</b><br>" +
+                       "• Segurança em Tecnologia da Informação - <b>Cursos Integrados</b><br>" +
+                       "• Segurança em Linux - <b>IBSEC</b>",
+            
+            "cyber": "<b>EXPERIÊNCIA EM CYBERSECURITY:</b><br> > Pentesting e análise de vulnerabilidades. <br> > Defesa de perímetros e firewalls. <br> > Hardening de sistemas Linux.",
+            
+            "contato": "GitHub: <a href='https://github.com/sixtyrr' target='_blank' style='color: white;'>github.com/sixtyrr</a>",
+            
             "limpar": ""
         };
 
         userInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 const command = userInput.value.toLowerCase().trim();
-                
-                // Exibe o comando digitado no terminal
                 printLine(`<span class="prompt-text">sixtyrr@cyber:~$</span> ${command}`);
 
                 if (command === 'limpar') {
@@ -122,6 +129,11 @@
             div.innerHTML = text;
             terminal.appendChild(div);
         }
+
+        // Garante que o foco sempre retorne ao input
+        userInput.addEventListener('blur', () => {
+            setTimeout(() => userInput.focus(), 10);
+        });
     </script>
 </body>
 </html>
